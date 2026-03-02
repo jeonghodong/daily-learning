@@ -1,0 +1,7 @@
+[
+    { "id": 1, "name": "강남 연세내과", "category": "내과", "distance": 0.5, "isOpen": true },
+    { "id": 2, "name": "바른정형외과", "category": "정형외과", "distance": 1.2, "isOpen": false },
+    { "id": 3, "name": "우리소아과", "category": "소아과", "distance": 0.8, "isOpen": true },
+    { "id": 4, "name": "강남 안과", "category": "안과", "distance": 2.1, "isOpen": true },
+    { "id": 5, "name": "속편한내과", "category": "내과", "distance": 1.5, "isOpen": true }
+]

@@ -1,3 +1,4 @@
 const input = `9 8
 CCTGGATTG
 2 0 1 1`
+

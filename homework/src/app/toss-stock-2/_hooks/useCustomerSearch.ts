@@ -1,8 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   AccountStatus,
   Customer,
@@ -68,49 +72,30 @@ function buildSearchString(filters: Partial<SearchFilters>): string {
 export function useCustomerSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const [data, setData] = useState<PaginatedResponse<Customer> | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const filters = parseFiltersFromSearchParams(searchParams);
 
+  const {
+    data,
+    isLoading,
+    isPlaceholderData,
+    error,
+  } = useQuery({
+    queryKey: ['customers', filters],
+    queryFn: () => MockApi.fetchCustomers(filtersToParams(filters)),
+    placeholderData: keepPreviousData,
+  });
+
   useEffect(() => {
-    let cancelled = false;
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const params = filtersToParams(filters);
-        const result = await MockApi.fetchCustomers(params);
-        if (!cancelled) {
-          setData(result);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : '알 수 없는 오류');
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchData();
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    filters.name,
-    filters.phone,
-    filters.status,
-    filters.startDate,
-    filters.endDate,
-    filters.page,
-    filters.limit,
-  ]);
+    if (data && filters.page < data.totalPages) {
+      const nextFilters = { ...filters, page: filters.page + 1 };
+      queryClient.prefetchQuery({
+        queryKey: ['customers', nextFilters],
+        queryFn: () => MockApi.fetchCustomers(filtersToParams(nextFilters)),
+      });
+    }
+  }, [data, filters, queryClient]);
 
   const updateSearch = useCallback(
     (newFilters: Partial<SearchFilters>) => {
@@ -132,9 +117,10 @@ export function useCustomerSearch() {
 
   return {
     filters,
-    data,
-    loading,
-    error,
+    data: data ?? null,
+    isLoading,
+    isPlaceholderData: isPlaceholderData ?? false,
+    error: error ? (error instanceof Error ? error.message : '알 수 없는 오류') : null,
     updateSearch,
     updatePage,
   };

@@ -5,6 +5,7 @@ export type { AccountStatus, Customer };
 export type CustomerTableProps = {
   customers: Customer[];
   loading: boolean;
+  isStale?: boolean;
 };
 
 export const STATUS_LABELS: Record<AccountStatus, string> = {

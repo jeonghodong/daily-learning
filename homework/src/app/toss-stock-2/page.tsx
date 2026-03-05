@@ -7,8 +7,15 @@ import { SearchForm } from './_components/search-form';
 import { useCustomerSearch } from './_hooks/useCustomerSearch';
 
 function TossStock2Content() {
-  const { filters, data, loading, error, updateSearch, updatePage } =
-    useCustomerSearch();
+  const {
+    filters,
+    data,
+    isLoading,
+    isPlaceholderData,
+    error,
+    updateSearch,
+    updatePage,
+  } = useCustomerSearch();
 
   if (error) {
     return <div className="p-4 text-red-600">에러: {error}</div>;
@@ -28,10 +35,14 @@ function TossStock2Content() {
         filters={filters}
         onSearch={updateSearch}
       />
-      <CustomerTable customers={data?.data ?? []} loading={loading} />
+      <CustomerTable
+        customers={data?.data ?? []}
+        loading={isLoading}
+        isStale={isPlaceholderData}
+      />
       {data && data.totalPages > 0 && (
         <Pagination
-          currentPage={data.currentPage}
+          currentPage={filters.page}
           totalPages={data.totalPages}
           onPageChange={updatePage}
         />

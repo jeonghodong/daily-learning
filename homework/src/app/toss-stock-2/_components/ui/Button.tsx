@@ -6,6 +6,7 @@ type ButtonProps = {
   variant?: ButtonVariant;
   type?: 'button' | 'submit';
   onClick?: () => void;
+  disabled?: boolean;
   children: React.ReactNode;
 };
 
@@ -20,10 +21,16 @@ export function Button({
   variant = 'primary',
   type = 'button',
   onClick,
+  disabled = false,
   children,
 }: ButtonProps) {
   return (
-    <button type={type} onClick={onClick} className={variantClasses[variant]}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={`${variantClasses[variant]} disabled:cursor-not-allowed disabled:opacity-50`}
+    >
       {children}
     </button>
   );

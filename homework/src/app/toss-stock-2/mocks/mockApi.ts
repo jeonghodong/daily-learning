@@ -106,6 +106,28 @@ export const MockApi = {
     });
   },
 
+  // ② -2 일괄 활성화 (에러 상황 포함)
+  bulkActivateAccounts: async (
+    customerIds: string[],
+  ): Promise<{ success: boolean; message: string }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (Math.random() < 0.1) {
+          reject(new Error('서버 응답 지연으로 처리에 실패했습니다.'));
+          return;
+        }
+
+        MOCK_DB = MOCK_DB.map((c) =>
+          customerIds.includes(c.id) ? { ...c, status: 'NORMAL' as const } : c,
+        );
+        resolve({
+          success: true,
+          message: `${customerIds.length}명의 계정이 활성화되었습니다.`,
+        });
+      }, 800);
+    });
+  },
+
   // ③ 보상금 지급
   payCompensation: async (
     customerId: string,

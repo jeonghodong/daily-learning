@@ -6,6 +6,10 @@ export type CustomerTableProps = {
   customers: Customer[];
   loading: boolean;
   isStale?: boolean;
+  selectedIds?: Set<string>;
+  onToggle?: (id: string) => void;
+  onToggleAll?: () => void;
+  isAllSelected?: boolean;
 };
 
 export const STATUS_LABELS: Record<AccountStatus, string> = {

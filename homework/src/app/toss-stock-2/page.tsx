@@ -1,10 +1,15 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
+import { BulkActionBar } from './_components/bulk-action-bar';
+import type { BulkActionType } from './_components/bulk-action-bar/types';
 import { CustomerTable } from './_components/customer-table';
 import { Pagination } from './_components/pagination';
 import { SearchForm } from './_components/search-form';
+import { ToastProvider } from './_components/toast';
+import { useBulkAction } from './_hooks/useBulkSuspend';
 import { useCustomerSearch } from './_hooks/useCustomerSearch';
+import { useRowSelection } from './_hooks/useRowSelection';
 
 function TossStock2Content() {
   const {
@@ -16,6 +21,36 @@ function TossStock2Content() {
     updateSearch,
     updatePage,
   } = useCustomerSearch();
+
+  const customers = data?.data ?? [];
+  const customerIds = customers.map((c) => c.id);
+  const {
+    selectedIds,
+    toggle,
+    toggleAll,
+    clearSelection,
+    isAllSelected,
+  } = useRowSelection(customerIds);
+  const { bulkSuspend, bulkActivate, isPending } =
+    useBulkAction(clearSelection);
+
+  const actionType: BulkActionType = useMemo(() => {
+    if (selectedIds.size === 0) return 'mixed';
+    const selectedCustomers = customers.filter((c) => selectedIds.has(c.id));
+    const allNormal = selectedCustomers.every((c) => c.status === 'NORMAL');
+    const allSuspended = selectedCustomers.every((c) => c.status === 'SUSPENDED');
+    if (allNormal) return 'suspend';
+    if (allSuspended) return 'activate';
+    return 'mixed';
+  }, [selectedIds, customers]);
+
+  const handleBulkSuspend = () => {
+    bulkSuspend(Array.from(selectedIds));
+  };
+
+  const handleBulkActivate = () => {
+    bulkActivate(Array.from(selectedIds));
+  };
 
   if (error) {
     return <div className="p-4 text-red-600">에러: {error}</div>;
@@ -35,10 +70,21 @@ function TossStock2Content() {
         filters={filters}
         onSearch={updateSearch}
       />
+      <BulkActionBar
+        selectedCount={selectedIds.size}
+        actionType={actionType}
+        onBulkSuspend={handleBulkSuspend}
+        onBulkActivate={handleBulkActivate}
+        isPending={isPending}
+      />
       <CustomerTable
-        customers={data?.data ?? []}
+        customers={customers}
         loading={isLoading}
         isStale={isPlaceholderData}
+        selectedIds={selectedIds}
+        onToggle={toggle}
+        onToggleAll={toggleAll}
+        isAllSelected={isAllSelected}
       />
       {data && data.totalPages > 0 && (
         <Pagination
@@ -60,7 +106,9 @@ export default function TossStock2() {
         </div>
       }
     >
-      <TossStock2Content />
+      <ToastProvider>
+        <TossStock2Content />
+      </ToastProvider>
     </Suspense>
   );
 }

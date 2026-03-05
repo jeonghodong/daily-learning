@@ -1,10 +1,11 @@
 'use client';
 
-import { Button } from '../ui/Button';
-import { DateInput } from '../ui/DateInput';
-import { SelectInput } from '../ui/SelectInput';
-import { TextInput } from '../ui/TextInput';
+import { Button } from '../UI/Button';
+import { DateInput } from '../UI/DateInput';
+import { SelectInput } from '../UI/SelectInput';
+import { TextInput } from '../UI/TextInput';
 import { useSearchFormState } from './hooks';
+import * as styles from './styles.css';
 import type { SearchFormProps } from './types';
 import { STATUS_OPTIONS } from './types';
 
@@ -25,8 +26,8 @@ export function SearchForm({ filters, onSearch }: SearchFormProps) {
   } = useSearchFormState(filters, onSearch);
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.grid}>
         <TextInput
           id="name"
           label="고객 이름"
@@ -61,7 +62,7 @@ export function SearchForm({ filters, onSearch }: SearchFormProps) {
           onChange={setEndDate}
         />
       </div>
-      <div className="mt-4 flex gap-2">
+      <div className={styles.actions}>
         <Button type="submit" variant="primary">
           검색
         </Button>

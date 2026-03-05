@@ -1,4 +1,4 @@
-import type { SelectOption } from '../ui/SelectInput';
+import type { SelectOption } from '../UI/SelectInput';
 import type { SearchFilters } from '../../_hooks/useCustomerSearch';
 
 export type SearchFormProps = {

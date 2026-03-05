@@ -13,7 +13,7 @@ import {
   FetchCustomersParams,
   MockApi,
   PaginatedResponse,
-} from '../mocks/mockApi';
+} from '../_mocks/mockApi';
 
 const DEFAULT_LIMIT = 10;
 
@@ -76,12 +76,7 @@ export function useCustomerSearch() {
 
   const filters = parseFiltersFromSearchParams(searchParams);
 
-  const {
-    data,
-    isLoading,
-    isPlaceholderData,
-    error,
-  } = useQuery({
+  const { data, isLoading, isPlaceholderData, error } = useQuery({
     queryKey: ['customers', filters],
     queryFn: () => MockApi.fetchCustomers(filtersToParams(filters)),
     placeholderData: keepPreviousData,
@@ -120,7 +115,11 @@ export function useCustomerSearch() {
     data: data ?? null,
     isLoading,
     isPlaceholderData: isPlaceholderData ?? false,
-    error: error ? (error instanceof Error ? error.message : '알 수 없는 오류') : null,
+    error: error
+      ? error instanceof Error
+        ? error.message
+        : '알 수 없는 오류'
+      : null,
     updateSearch,
     updatePage,
   };

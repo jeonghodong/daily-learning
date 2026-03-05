@@ -2,8 +2,8 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { useToast } from '../_components/toast';
-import { MockApi } from '../mocks/mockApi';
+import { useToast } from '../_components/Toast';
+import { MockApi } from '../_mocks/mockApi';
 
 export type BulkActionType = 'suspend' | 'activate';
 

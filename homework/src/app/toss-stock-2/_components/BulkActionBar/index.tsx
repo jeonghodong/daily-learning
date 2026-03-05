@@ -1,7 +1,8 @@
 'use client';
 
-import { Button } from '../ui/Button';
+import { Button } from '../UI/Button';
 import type { BulkActionBarProps } from './types';
+import * as styles from './styles.css';
 
 export function BulkActionBar({
   selectedCount,
@@ -13,10 +14,8 @@ export function BulkActionBar({
   if (selectedCount === 0) return null;
 
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-      <span className="text-sm font-medium text-gray-700">
-        {selectedCount}명 선택됨
-      </span>
+    <div className={styles.bar}>
+      <span className={styles.label}>{selectedCount}명 선택됨</span>
       {actionType === 'suspend' && (
         <Button
           type="button"
@@ -38,9 +37,7 @@ export function BulkActionBar({
         </Button>
       )}
       {actionType === 'mixed' && (
-        <span className="text-sm text-gray-500">
-          동일한 상태의 고객만 선택해주세요
-        </span>
+        <span className={styles.hint}>동일한 상태의 고객만 선택해주세요</span>
       )}
     </div>
   );

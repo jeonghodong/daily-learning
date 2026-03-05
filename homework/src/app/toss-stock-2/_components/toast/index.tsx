@@ -2,10 +2,11 @@
 
 import { ToastContextProvider, useToast } from './context';
 import type { ToastType } from './types';
+import * as styles from './styles.css';
 
-const typeStyles: Record<ToastType, string> = {
-  success: 'bg-green-600 text-white',
-  error: 'bg-red-600 text-white',
+const itemStyles: Record<ToastType, string> = {
+  success: styles.itemSuccess,
+  error: styles.itemError,
 };
 
 function ToastList() {
@@ -15,24 +16,24 @@ function ToastList() {
 
   return (
     <div
-      className="fixed right-4 top-4 z-50 flex flex-col gap-2"
+      className={styles.container}
       role="region"
       aria-label="알림"
     >
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`flex min-w-[280px] max-w-md items-center justify-between rounded-lg px-4 py-3 shadow-lg transition-opacity ${typeStyles[toast.type]}`}
+          className={itemStyles[toast.type]}
           role="alert"
         >
-          <span className="text-sm font-medium">{toast.message}</span>
+          <span className={styles.message}>{toast.message}</span>
           <button
             type="button"
             onClick={() => removeToast(toast.id)}
-            className="ml-2 rounded p-1 opacity-80 hover:opacity-100"
+            className={styles.closeButton}
             aria-label="닫기"
           >
-            <span className="text-lg leading-none">&times;</span>
+            <span className={styles.closeIcon}>&times;</span>
           </button>
         </div>
       ))}

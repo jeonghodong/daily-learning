@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { Suspense, useMemo } from 'react';
-import { BulkActionBar } from './_components/bulk-action-bar';
-import type { BulkActionType } from './_components/bulk-action-bar/types';
-import { CustomerTable } from './_components/customer-table';
-import { Pagination } from './_components/pagination';
-import { SearchForm } from './_components/search-form';
-import { ToastProvider } from './_components/toast';
+import { BulkActionBar } from './_components/BulkActionBar';
+import type { BulkActionType } from './_components/BulkActionBar/types';
+import { CustomerTable } from './_components/CustomerTable';
+import { Pagination } from './_components/Pagination';
+import { SearchForm } from './_components/SearchForm';
+import { ToastProvider } from './_components/Toast';
 import { useBulkAction } from './_hooks/useBulkSuspend';
 import { useCustomerSearch } from './_hooks/useCustomerSearch';
 import { useRowSelection } from './_hooks/useRowSelection';
+import * as styles from './_styles/page.css';
 
 function TossStock2Content() {
   const {
@@ -24,13 +26,8 @@ function TossStock2Content() {
 
   const customers = data?.data ?? [];
   const customerIds = customers.map((c) => c.id);
-  const {
-    selectedIds,
-    toggle,
-    toggleAll,
-    clearSelection,
-    isAllSelected,
-  } = useRowSelection(customerIds);
+  const { selectedIds, toggle, toggleAll, clearSelection, isAllSelected } =
+    useRowSelection(customerIds);
   const { bulkSuspend, bulkActivate, isPending } =
     useBulkAction(clearSelection);
 
@@ -38,7 +35,9 @@ function TossStock2Content() {
     if (selectedIds.size === 0) return 'mixed';
     const selectedCustomers = customers.filter((c) => selectedIds.has(c.id));
     const allNormal = selectedCustomers.every((c) => c.status === 'NORMAL');
-    const allSuspended = selectedCustomers.every((c) => c.status === 'SUSPENDED');
+    const allSuspended = selectedCustomers.every(
+      (c) => c.status === 'SUSPENDED',
+    );
     if (allNormal) return 'suspend';
     if (allSuspended) return 'activate';
     return 'mixed';
@@ -53,12 +52,12 @@ function TossStock2Content() {
   };
 
   if (error) {
-    return <div className="p-4 text-red-600">에러: {error}</div>;
+    return <div className={styles.error}>에러: {error}</div>;
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <h1 className="text-xl font-semibold text-gray-900">고객 관리</h1>
+    <div className={styles.layout}>
+      <h1 className={styles.heading}>고객 관리</h1>
       <SearchForm
         key={[
           filters.name,
@@ -100,11 +99,7 @@ function TossStock2Content() {
 export default function TossStock2() {
   return (
     <Suspense
-      fallback={
-        <div className="flex items-center justify-center p-12 text-gray-500">
-          Loading...
-        </div>
-      }
+      fallback={<div className={styles.loadingFallback}>Loading...</div>}
     >
       <ToastProvider>
         <TossStock2Content />

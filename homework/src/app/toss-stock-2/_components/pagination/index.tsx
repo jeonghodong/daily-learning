@@ -2,6 +2,7 @@
 
 import type { PaginationProps } from './types';
 import { getPageNumbers } from './utils';
+import * as styles from './styles.css';
 
 export function Pagination({
   currentPage,
@@ -15,28 +16,26 @@ export function Pagination({
   const canNext = currentPage < totalPages;
 
   return (
-    <nav className="flex items-center justify-center gap-1 py-4" aria-label="페이지네이션">
+    <nav className={styles.nav} aria-label="페이지네이션">
       <button
         type="button"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={!canPrev}
         aria-label="이전 페이지"
-        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+        className={styles.button}
       >
         이전
       </button>
-      <div className="flex gap-1">
+      <div className={styles.buttonGroup}>
         {pages.map((page) => (
           <button
             key={page}
             type="button"
             onClick={() => onPageChange(page)}
             aria-current={page === currentPage ? 'page' : undefined}
-            className={`rounded-md border px-3 py-2 text-sm font-medium ${
-              page === currentPage
-                ? 'border-blue-600 bg-blue-600 text-white'
-                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-            }`}
+            className={
+              page === currentPage ? styles.buttonActive : styles.button
+            }
           >
             {page}
           </button>
@@ -47,7 +46,7 @@ export function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!canNext}
         aria-label="다음 페이지"
-        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+        className={styles.button}
       >
         다음
       </button>

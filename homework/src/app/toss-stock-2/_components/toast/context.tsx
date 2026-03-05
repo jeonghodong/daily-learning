@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { AddToastOptions, ToastItem } from './types';
+import { AddToastOptions, ToastItem } from './types';
 
 type ToastContextValue = {
   toasts: ToastItem[];
@@ -25,7 +25,9 @@ export function ToastContextProvider({
   children: React.ReactNode;
 }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
-  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
+    new Map(),
+  );
 
   const removeToast = useCallback((id: string) => {
     const timer = timersRef.current.get(id);

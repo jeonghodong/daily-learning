@@ -1,5 +1,7 @@
 'use client';
 
+import * as styles from './FormField.css';
+
 type FormFieldProps = {
   id: string;
   label: string;
@@ -9,7 +11,7 @@ type FormFieldProps = {
 export function FormField({ id, label, children }: FormFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1 block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className={styles.label}>
         {label}
       </label>
       {children}

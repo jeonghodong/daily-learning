@@ -1,5 +1,7 @@
 'use client';
 
+import * as styles from './Checkbox.css';
+
 type CheckboxProps = {
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -20,7 +22,7 @@ export function Checkbox({
       onChange={(e) => onChange(e.target.checked)}
       disabled={disabled}
       aria-label={ariaLabel}
-      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+      className={styles.input}
     />
   );
 }

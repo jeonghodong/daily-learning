@@ -1,4 +1,5 @@
-import type { AccountStatus, Customer } from '../../mocks/mockApi';
+import type { AccountStatus, Customer } from '../../_mocks/mockApi';
+import * as tableStyles from './styles.css';
 
 export type { AccountStatus, Customer };
 
@@ -19,7 +20,7 @@ export const STATUS_LABELS: Record<AccountStatus, string> = {
 };
 
 export const STATUS_CLASSES: Record<AccountStatus, string> = {
-  NORMAL: 'bg-green-100 text-green-800',
-  SUSPENDED: 'bg-red-100 text-red-800',
-  DORMANT: 'bg-gray-100 text-gray-700',
+  NORMAL: tableStyles.badgeNormal,
+  SUSPENDED: tableStyles.badgeSuspended,
+  DORMANT: tableStyles.badgeDormant,
 };

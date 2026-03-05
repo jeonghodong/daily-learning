@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "concurrently -n nextjs,storybook -c blue,magenta \"next dev --webpack\" \"storybook dev -p 6006\"",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
@@ -18,16 +20,29 @@
     "react-window": "^2.2.7"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
+    "@storybook/addon-a11y": "^10.2.15",
+    "@storybook/addon-docs": "^10.2.15",
+    "@storybook/addon-onboarding": "^10.2.15",
+    "@storybook/addon-vitest": "^10.2.15",
+    "@storybook/nextjs-vite": "^10.2.15",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-window": "^2.0.0",
+    "@vanilla-extract/vite-plugin": "^5.1.4",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
+    "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "playwright": "^1.58.2",
     "prettier": "^3.8.1",
+    "storybook": "^10.2.15",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   }
 }
